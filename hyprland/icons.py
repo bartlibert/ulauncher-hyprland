@@ -2,7 +2,7 @@ import os
 import os.path
 import logging
 from xdg.IconTheme import getIconPath
-from sway.util import get_child_or_else
+from hyprland.util import get_child_or_else
 
 
 logger = logging.getLogger(__name__)
@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 def get_icon(con):
     '''Determines the icon for a program.
     '''
-    logger.debug("Resolving icon for container %s...", con["id"])
+    logger.debug("Resolving icon for container %s...", con["address"])
 
     # See: https://lists.freedesktop.org/archives/wayland-devel/2018-April/037998.html
     suppliers = [

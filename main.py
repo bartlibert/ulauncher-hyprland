@@ -9,17 +9,17 @@ from ulauncher.api.shared.action.RenderResultListAction import RenderResultListA
 from ulauncher.api.shared.action.RunScriptAction import RunScriptAction
 from ulauncher.api.shared.action.ExtensionCustomAction import ExtensionCustomAction
 import subprocess
-import sway.windows as windows
-from sway.icons import get_icon
+import hyprland.windows as windows
+from hyprland.icons import get_icon
 
 
 logger = logging.getLogger(__name__)
 
 
-class SwayWindowsExtension(Extension):
+class HyprlandWindowsExtension(Extension):
 
     def __init__(self):
-        super(SwayWindowsExtension, self).__init__()
+        super(HyprlandWindowsExtension, self).__init__()
         self.subscribe(KeywordQueryEvent, KeywordQueryEventListener())
         self.subscribe(ItemEnterEvent, ItemEnterEventListener())
 
@@ -35,7 +35,7 @@ class KeywordQueryEventListener(EventListener):
                       for w in windows.get_windows()
                       # Don't include the ulauncher dialog in the list,
                       # since it already has focus
-                      if self.matches_query(w, query) and not w["focused"]])
+                      if self.matches_query(w, query) and not w["active"]])
 
         return RenderResultListAction(items)
 
@@ -55,7 +55,7 @@ class KeywordQueryEventListener(EventListener):
         (_, appName, winTitle) = windows.app_details(con)
 
         return ExtensionResultItem(
-                icon=get_icon(con),
+                # icon=get_icon(con),
                 name=winTitle,
                 description=appName,
                 # This only works because con is a dict, and therefore pickleable
@@ -66,9 +66,10 @@ class ItemEnterEventListener(EventListener):
     '''Executes the focus event, using the data provided in ExtensionCustomAction'''
 
     def on_event(self, event, extension):
+        print('on_event')
         con = event.get_data()
         windows.focus(con)
 
 
 if __name__ == '__main__':
-    SwayWindowsExtension().run()
+    HyprlandWindowsExtension().run()
